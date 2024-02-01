@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Linq;
 
-namespace MOT.CORE.Utils.DataStructs
+namespace MOT.Core.Utils.DataStructs
 {
     public class Vector
     {

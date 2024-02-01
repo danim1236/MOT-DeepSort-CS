@@ -1,8 +1,8 @@
-﻿using MOT.CORE.Matchers.Abstract;
-using MOT.CORE.Utils.Pool;
-using System.Drawing;
+﻿using System.Drawing;
+using MOT.Core.Matchers.Abstract;
+using MOT.Core.Utils.Pool;
 
-namespace MOT.CORE.Matchers.Trackers
+namespace MOT.Core.Matchers.Trackers
 {
     public class SimpleTracker<TTrack> : ITracker<TTrack>, IPoolable where TTrack : ITrack
     {

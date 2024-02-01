@@ -1,11 +1,11 @@
-﻿using MOT.CORE.Matchers.Abstract;
-using MOT.CORE.Utils.Algorithms;
-using MOT.CORE.Utils.DataStructs;
-using MOT.CORE.Utils.Pool;
-using System;
+﻿using System;
 using System.Drawing;
+using MOT.Core.Matchers.Abstract;
+using MOT.Core.Utils.Algorithms;
+using MOT.Core.Utils.DataStructs;
+using MOT.Core.Utils.Pool;
 
-namespace MOT.CORE.Matchers.Trackers
+namespace MOT.Core.Matchers.Trackers
 {
     public class KalmanTracker<TTrack> : ITracker<TTrack>, IPoolable where TTrack : ITrack
     {

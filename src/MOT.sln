@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MOT", "MOT\MOT.csproj", "{4AD3A84A-1DBF-4665-B0F6-8D5F446EB6FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MOT", "MOT\MOT.csproj", "{4AD3A84A-1DBF-4665-B0F6-8D5F446EB6FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MOT.CORE", "MOT.CORE\MOT.CORE.csproj", "{0A90C21E-6ED8-49EB-98F0-43BC71DC256B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MOT.Core", "MOT.Core\MOT.Core.csproj", "{0A90C21E-6ED8-49EB-98F0-43BC71DC256B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

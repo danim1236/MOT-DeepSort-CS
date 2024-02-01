@@ -1,7 +1,7 @@
-﻿using MOT.CORE.Utils.DataStructs;
-using System;
+﻿using System;
+using MOT.Core.Utils.DataStructs;
 
-namespace MOT.CORE.Utils.Algorithms
+namespace MOT.Core.Utils.Algorithms
 {
     public class KalmanFilter
     {

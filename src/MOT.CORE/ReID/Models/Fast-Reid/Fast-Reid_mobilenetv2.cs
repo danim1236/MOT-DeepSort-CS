@@ -1,4 +1,4 @@
-﻿namespace MOT.CORE.ReID.Models.Fast_Reid
+﻿namespace MOT.Core.ReID.Models.Fast_Reid
 {
     public class Fast_Reid_mobilenetv2 : IReidModel
     {

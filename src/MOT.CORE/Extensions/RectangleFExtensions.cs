@@ -1,7 +1,7 @@
-﻿using MOT.CORE.Utils.DataStructs;
-using System.Drawing;
+﻿using System.Drawing;
+using MOT.Core.Utils.DataStructs;
 
-namespace MOT.CORE.Extensions
+namespace MOT.Core.Extensions
 {
     public static class RectangleFExtensions
     {

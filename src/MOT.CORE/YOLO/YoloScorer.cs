@@ -1,8 +1,4 @@
-﻿using Microsoft.ML.OnnxRuntime;
-using Microsoft.ML.OnnxRuntime.Tensors;
-using MOT.CORE.Utils;
-using MOT.CORE.YOLO.Models;
-using System;
+﻿using System;
 using System.Buffers;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -12,8 +8,12 @@ using System.Drawing.Imaging;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using Microsoft.ML.OnnxRuntime;
+using Microsoft.ML.OnnxRuntime.Tensors;
+using MOT.Core.Utils;
+using MOT.Core.YOLO.Models;
 
-namespace MOT.CORE.YOLO
+namespace MOT.Core.YOLO
 {
     public class YoloScorer<TYoloModel> : IPredictor where TYoloModel : IYoloModel
     {

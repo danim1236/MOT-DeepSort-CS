@@ -1,8 +1,8 @@
-﻿using MOT.CORE.Matchers.Abstract;
-using System.Drawing;
-using MOT.CORE.Matchers.Base;
+﻿using System.Drawing;
+using MOT.Core.Matchers.Abstract;
+using MOT.Core.Matchers.Base;
 
-namespace MOT.CORE.Matchers.SORT
+namespace MOT.Core.Matchers.SORT
 {
     public class SortTrack : TrackDecorator
     {

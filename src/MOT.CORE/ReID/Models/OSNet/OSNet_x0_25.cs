@@ -1,4 +1,4 @@
-﻿namespace MOT.CORE.ReID.Models.OSNet
+﻿namespace MOT.Core.ReID.Models.OSNet
 {
     public class OSNet_x0_25 : IReidModel
     {

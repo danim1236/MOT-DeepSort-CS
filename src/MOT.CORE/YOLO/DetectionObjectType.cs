@@ -1,4 +1,4 @@
-﻿namespace MOT.CORE.YOLO
+﻿namespace MOT.Core.YOLO
 {
     public enum DetectionObjectType : byte
     {

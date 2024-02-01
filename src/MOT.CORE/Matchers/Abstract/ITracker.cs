@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace MOT.CORE.Matchers.Abstract
+namespace MOT.Core.Matchers.Abstract
 {
     public interface ITracker<TTrack> where TTrack : ITrack
     {

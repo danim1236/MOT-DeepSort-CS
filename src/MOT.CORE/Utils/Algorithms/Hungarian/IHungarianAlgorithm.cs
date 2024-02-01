@@ -1,4 +1,4 @@
-﻿namespace MOT.CORE.Utils.Algorithms.Hungarian
+﻿namespace MOT.Core.Utils.Algorithms.Hungarian
 {
     public interface IHungarianAlgorithm
     {

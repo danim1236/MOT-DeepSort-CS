@@ -1,9 +1,8 @@
-﻿using MOT.CORE.Extensions;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Numerics;
+using MOT.Core.Extensions;
 
-namespace MOT.CORE.Utils
+namespace MOT.Core.Utils
 {
     public static class Metrics
     {

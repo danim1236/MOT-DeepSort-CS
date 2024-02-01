@@ -1,4 +1,4 @@
-﻿namespace MOT.CORE.YOLO.Models
+﻿namespace MOT.Core.YOLO.Models
 {
     public interface IYoloModel
     {

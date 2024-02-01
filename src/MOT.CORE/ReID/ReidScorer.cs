@@ -1,16 +1,16 @@
-﻿using Microsoft.ML.OnnxRuntime.Tensors;
-using Microsoft.ML.OnnxRuntime;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Drawing.Imaging;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
-using MOT.CORE.ReID.Models;
-using MOT.CORE.YOLO;
-using MOT.CORE.Utils.DataStructs;
 using System.Threading.Tasks;
+using Microsoft.ML.OnnxRuntime;
+using Microsoft.ML.OnnxRuntime.Tensors;
+using MOT.Core.ReID.Models;
+using MOT.Core.Utils.DataStructs;
+using MOT.Core.YOLO;
 
-namespace MOT.CORE.ReID
+namespace MOT.Core.ReID
 {
     public class ReidScorer<TReidModel> : IAppearanceExtractor where TReidModel : IReidModel
     {

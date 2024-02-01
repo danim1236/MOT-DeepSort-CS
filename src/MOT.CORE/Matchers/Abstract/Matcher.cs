@@ -1,12 +1,12 @@
-﻿using MOT.CORE.Utils.Pool;
-using MOT.CORE.YOLO;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using MOT.Core.Utils.Pool;
+using MOT.Core.YOLO;
 
-namespace MOT.CORE.Matchers.Abstract
+namespace MOT.Core.Matchers.Abstract
 {
     public abstract class Matcher : IDisposable
     {

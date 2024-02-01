@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MOT.CORE.Utils.DataStructs
+namespace MOT.Core.Utils.DataStructs
 {
     public struct Point2
     {

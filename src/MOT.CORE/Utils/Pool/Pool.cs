@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 
-namespace MOT.CORE.Utils.Pool
+namespace MOT.Core.Utils.Pool
 {
     public sealed class Pool<T> : IPool<T> where T : IPoolable
     {

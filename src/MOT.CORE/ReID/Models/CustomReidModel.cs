@@ -1,4 +1,4 @@
-﻿namespace MOT.CORE.ReID.Models
+﻿namespace MOT.Core.ReID.Models
 {
     public class CustomReidModel : IReidModel
     {

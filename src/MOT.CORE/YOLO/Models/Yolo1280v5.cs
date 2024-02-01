@@ -1,4 +1,4 @@
-﻿namespace MOT.CORE.YOLO.Models
+﻿namespace MOT.Core.YOLO.Models
 {
     public class Yolo1280v5 : IYoloModel
     {

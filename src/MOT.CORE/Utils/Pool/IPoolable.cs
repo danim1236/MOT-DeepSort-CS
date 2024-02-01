@@ -1,4 +1,4 @@
-﻿namespace MOT.CORE.Utils.Pool
+﻿namespace MOT.Core.Utils.Pool
 {
     public interface IPoolable
     {

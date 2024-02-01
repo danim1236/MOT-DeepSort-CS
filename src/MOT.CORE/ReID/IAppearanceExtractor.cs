@@ -1,10 +1,10 @@
-﻿using MOT.CORE.Utils.DataStructs;
-using MOT.CORE.YOLO;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using MOT.Core.Utils.DataStructs;
+using MOT.Core.YOLO;
 
-namespace MOT.CORE.ReID
+namespace MOT.Core.ReID
 {
     public interface IAppearanceExtractor : IDisposable
     {

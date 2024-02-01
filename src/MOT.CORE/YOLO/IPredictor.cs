@@ -1,8 +1,8 @@
-﻿using System.Drawing;
+﻿using System;
 using System.Collections.Generic;
-using System;
+using System.Drawing;
 
-namespace MOT.CORE.YOLO
+namespace MOT.Core.YOLO
 {
     public interface IPredictor : IDisposable
     {

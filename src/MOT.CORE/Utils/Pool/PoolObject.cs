@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MOT.CORE.Utils.Pool
+namespace MOT.Core.Utils.Pool
 {
     public sealed class PoolObject<T> : IDisposable
     {

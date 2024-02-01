@@ -1,8 +1,8 @@
-﻿using MOT.CORE.YOLO;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
+using MOT.Core.YOLO;
 
-namespace MOT.CORE.Matchers.Abstract
+namespace MOT.Core.Matchers.Abstract
 {
     public interface ITrack
     {

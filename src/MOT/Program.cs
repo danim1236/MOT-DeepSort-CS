@@ -1,15 +1,15 @@
 ﻿#pragma warning disable CA1416
 
 using Emgu.CV;
-using MOT.CORE.Matchers.Abstract;
-using MOT.CORE.ReID;
-using MOT.CORE.ReID.Models.OSNet;
-using MOT.CORE.YOLO;
-using MOT.CORE.YOLO.Models;
 using System.Drawing;
-using MOT.CORE.Matchers.SORT;
 using CommandLine;
-using MOT.CORE.ReID.Models.Fast_Reid;
+using MOT.Core.Matchers.Abstract;
+using MOT.Core.Matchers.SORT;
+using MOT.Core.ReID;
+using MOT.Core.ReID.Models.Fast_Reid;
+using MOT.Core.ReID.Models.OSNet;
+using MOT.Core.YOLO;
+using MOT.Core.YOLO.Models;
 
 namespace MOT
 {
