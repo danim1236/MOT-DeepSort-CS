@@ -16,18 +16,16 @@ namespace MOT.CORE.Matchers.Deep
     public class DeepSortMatcher : Matcher
     {
         private readonly Pool<KalmanTracker<DeepSortTrack>> _pool;
-        private readonly IPredictor _predictor;
         private readonly IAppearanceExtractor _appearanceExtractor;
 
         private List<PoolObject<KalmanTracker<DeepSortTrack>>> _trackers = new List<PoolObject<KalmanTracker<DeepSortTrack>>>();
 
-        public DeepSortMatcher(IPredictor predictor, IAppearanceExtractor appearanceExtractor,
+        public DeepSortMatcher(IAppearanceExtractor appearanceExtractor,
             float appearanceWeight = 0.775f, float threshold = 0.5f, int maxMisses = 50,
             int framesToAppearanceSmooth = 40, float smoothAppearanceWeight = 0.875f,
             int minStreak = 8, int poolCapacity = 50)
             : base(maxMisses, minStreak)
         {
-            _predictor = predictor;
             _appearanceExtractor = appearanceExtractor;
             IouWeight = 1 - appearanceWeight;
             AppearanceWeight = appearanceWeight;
@@ -45,45 +43,9 @@ namespace MOT.CORE.Matchers.Deep
         public float SmoothAppearanceWeight { get; private init; }
         public int AssosiatedAppearancesCount { get; private init; }
 
-        public override IReadOnlyList<ITrack> Run(Bitmap frame, float targetConfidence, params DetectionObjectType[] detectionObjectTypes)
-        {
-            var detectedObjects = Predict(frame, targetConfidence, detectionObjectTypes);
-
-            return Tracky(frame, detectedObjects);
-        }
-
-        private IReadOnlyList<ITrack> Tracky(Bitmap frame, IPrediction[] detectedObjects)
-        {
-            Vector[] appearances = _appearanceExtractor.Predict(frame, detectedObjects).ToArray();
-
-            if (_trackers.Count == 0)
-                return Init(detectedObjects, appearances);
-
-            PredictBoundingBoxes();
-
-            (IReadOnlyList<(int TrackIndex, int DetectionIndex)> matchedPairs, IReadOnlyList<int> unmatched) = Match(detectedObjects, appearances);
-
-            UpdateMatched(matchedPairs, detectedObjects, appearances);
-
-            for (int i = 0; i < unmatched.Count; i++)
-                AddNewTrack(detectedObjects, appearances, unmatched[i]);
-
-            List<ITrack> tracks = ConfirmTracks<KalmanTracker<DeepSortTrack>, DeepSortTrack>(_trackers);
-            RemoveOutdatedTracks<KalmanTracker<DeepSortTrack>, DeepSortTrack>(ref _trackers);
-
-            return tracks;
-        }
-
         public override void Dispose()
         {
-            _predictor.Dispose();
             _appearanceExtractor.Dispose();
-        }
-
-        public override IPrediction[] Predict(Bitmap frame, float targetConfidence, DetectionObjectType[] detectionObjectTypes)
-        {
-            IPrediction[] detectedObjects = _predictor.Predict(frame, targetConfidence, detectionObjectTypes).ToArray();
-            return detectedObjects;
         }
 
         public override IReadOnlyList<ITrack> Track(Bitmap frame, IPrediction[] detectedObjects)

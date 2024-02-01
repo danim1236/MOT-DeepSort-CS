@@ -14,27 +14,18 @@ namespace MOT.CORE.Matchers.SORT
     public class SortMatcher : Matcher
     {
         private readonly Pool<KalmanTracker<SortTrack>> _pool;
-        private readonly IPredictor _predictor;
 
         private List<PoolObject<KalmanTracker<SortTrack>>> _trackers = new List<PoolObject<KalmanTracker<SortTrack>>>();
 
-        public SortMatcher(IPredictor predictor, float iouThreshold = 0.3f, int maxMisses = 15,
+        public SortMatcher(float iouThreshold = 0.3f, int maxMisses = 15,
             int minStreak = 3, int poolCapacity = 50)
             : base(maxMisses, minStreak)
         {
-            _predictor = predictor;
             IouThreshold = iouThreshold;
             _pool = new Pool<KalmanTracker<SortTrack>>(poolCapacity);
         }
 
         public float IouThreshold { get; private init; }
-
-        public override IReadOnlyList<ITrack> Run(Bitmap frame, float targetConfidence, params DetectionObjectType[] detectionObjectTypes)
-        {
-            var detectedObjects = Predict(frame, targetConfidence, detectionObjectTypes);
-
-            return Track(frame, detectedObjects);
-        }
 
         public override IReadOnlyList<ITrack> Track(Bitmap frame, IPrediction[] detectedObjects)
         {
@@ -43,28 +34,21 @@ namespace MOT.CORE.Matchers.SORT
 
             PredictBoundingBoxes();
 
-            (List<(int TrackIndex, int DetectionIndex)> matchedPairs, List<int> unmatched) = MatchDetections(detectedObjects);
+            (List<(int TrackIndex, int DetectionIndex)> matchedPairs, var unmatched) = MatchDetections(detectedObjects);
 
             UpdateMatched(matchedPairs, detectedObjects);
 
-            for (int i = 0; i < unmatched.Count; i++)
-                AddNewTrack(detectedObjects, unmatched[i]);
+            foreach (var t in unmatched)
+                AddNewTrack(detectedObjects, t);
 
-            List<ITrack> tracks = ConfirmTracks<KalmanTracker<SortTrack>, SortTrack>(_trackers);
+            var tracks = ConfirmTracks<KalmanTracker<SortTrack>, SortTrack>(_trackers);
             RemoveOutdatedTracks<KalmanTracker<SortTrack>, SortTrack>(ref _trackers);
 
             return tracks;
         }
 
-        public override IPrediction[] Predict(Bitmap frame, float targetConfidence, DetectionObjectType[] detectionObjectTypes)
-        {
-            IPrediction[] detectedObjects = _predictor.Predict(frame, targetConfidence, detectionObjectTypes).ToArray();
-            return detectedObjects;
-        }
-
         public override void Dispose()
         {
-            _predictor.Dispose();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -123,19 +107,19 @@ namespace MOT.CORE.Matchers.SORT
 
         private (List<(int, int)> MatchedPairs, List<int> UnmatchedDetectionIndexes) MatchDetections(IReadOnlyList<IPrediction> detections)
         {
-            float[,] IoUMatrix = new float[_trackers.Count, detections.Count];
+            float[,] ioUMatrix = new float[_trackers.Count, detections.Count];
 
             for (int i = 0; i < _trackers.Count; i++)
                 for (int j = 0; j < detections.Count; j++)
-                    IoUMatrix[i, j] = Metrics.IntersectionOverUnionLoss(_trackers[i].Object.Track.PredictedBoundingBox, detections[j].CurrentBoundingBox);
+                    ioUMatrix[i, j] = Metrics.IntersectionOverUnionLoss(_trackers[i].Object.Track.PredictedBoundingBox, detections[j].CurrentBoundingBox);
 
-            HungarianAlgorithm<float> hungarianAlgorithm = new HungarianAlgorithm<float>(IoUMatrix);
+            HungarianAlgorithm<float> hungarianAlgorithm = new HungarianAlgorithm<float>(ioUMatrix);
             int[] assignment = hungarianAlgorithm.Solve();
 
-            List<int> allItemIndexes = new List<int>();
-            List<int> matched = new List<int>();
-            List<(int, int)> matchedPairs = new List<(int, int)>();
-            List<int> unmatched = new List<int>();
+            var allItemIndexes = new List<int>();
+            var matched = new List<int>();
+            var matchedPairs = new List<(int, int)>();
+            var unmatched = new List<int>();
 
             if (detections.Count > _trackers.Count)
             {
@@ -153,7 +137,7 @@ namespace MOT.CORE.Matchers.SORT
                 if (assignment[i] == -1)
                     continue;
 
-                if (1 - IoUMatrix[i, assignment[i]] < IouThreshold)
+                if (1 - ioUMatrix[i, assignment[i]] < IouThreshold)
                 {
                     unmatched.Add(assignment[i]);
                     continue;

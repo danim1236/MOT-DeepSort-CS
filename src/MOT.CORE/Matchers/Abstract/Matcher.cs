@@ -69,7 +69,6 @@ namespace MOT.CORE.Matchers.Abstract
         }
 
         public abstract void Dispose();
-        public abstract IPrediction[] Predict(Bitmap frame, float targetConfidence, params DetectionObjectType[] detectionObjectTypes);
         public abstract IReadOnlyList<ITrack> Track(Bitmap frame, IPrediction[] detectedObjects);
     }
 }

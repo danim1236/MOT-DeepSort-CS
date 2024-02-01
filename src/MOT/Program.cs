@@ -41,6 +41,8 @@ namespace MOT
 
             VideoWriter videoWriter = new VideoWriter(options.TargetFilePath, -1, targetFps, new Size(width, height), true);
 
+            IPredictor predictor = ConstructPredictorFromOptions(options);
+
             Matcher matcher = ConstructMatcherFromOptions(options);
             float targetConfidence = float.Clamp(options.TargetConfidence ?? 0.0f, 0.0f, 1.0f);
 
@@ -52,7 +54,7 @@ namespace MOT
             {
                 var frame = readBuffer.ToBitmap();
 
-                var detectedObjects = matcher.Predict(frame, targetConfidence, DetectionObjectType.Person);
+                var detectedObjects = predictor.Predict(frame, targetConfidence, DetectionObjectType.Person).ToArray();
 
                 var tracks = matcher.Track(frame, detectedObjects);
 
@@ -68,12 +70,9 @@ namespace MOT
 
         private static Matcher ConstructMatcherFromOptions(CommandLineOptions options)
         {
-            IPredictor predictor = ConstructPredictorFromOptions(options);
-
             Matcher matcher = options.MatcherType switch
             { 
-                MatcherType.DeepSort => new DeepSortMatcher(predictor,
-                    ConstructAppearanceExtractorFromOptions(options),
+                MatcherType.DeepSort => new DeepSortMatcher(ConstructAppearanceExtractorFromOptions(options),
                     options.AppearanceWeight ?? 0.775f,
                     options.Threshold ?? 0.5f,
                     options.MaxMisses ?? 50,
@@ -81,13 +80,11 @@ namespace MOT
                     options.SmoothAppearanceWeight ?? 0.875f,
                     options.MinStreak ?? 8),
 
-                MatcherType.Sort => new SortMatcher(predictor,
-                    options.Threshold ?? 0.3f,
+                MatcherType.Sort => new SortMatcher(options.Threshold ?? 0.3f,
                     options.MaxMisses ?? 15,
                     options.MinStreak ?? 3),
 
-                MatcherType.Deep => new DeepMatcher(predictor,
-                    ConstructAppearanceExtractorFromOptions(options),
+                MatcherType.Deep => new DeepMatcher(ConstructAppearanceExtractorFromOptions(options),
                     options.Threshold ?? 0.875f,
                     options.MaxMisses ?? 10,
                     options.MinStreak ?? 4),

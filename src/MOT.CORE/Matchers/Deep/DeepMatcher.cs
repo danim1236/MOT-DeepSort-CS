@@ -16,17 +16,15 @@ namespace MOT.CORE.Matchers.Deep
     public class DeepMatcher : Matcher
     {
         private readonly Pool<SimpleTracker<DeepTrack>> _pool;
-        private readonly IPredictor _predictor;
         private readonly IAppearanceExtractor _appearanceExtractor;
 
         private List<PoolObject<SimpleTracker<DeepTrack>>> _trackers = new List<PoolObject<SimpleTracker<DeepTrack>>>();
 
-        public DeepMatcher(IPredictor predictor, IAppearanceExtractor appearanceExtractor,
+        public DeepMatcher(IAppearanceExtractor appearanceExtractor,
             float appearanceThreshold = 0.875f, int maxMisses = 10, 
             int minStreak = 4, int poolCapacity = 20)
             : base(maxMisses, minStreak)
         {
-            _predictor = predictor;
             _appearanceExtractor = appearanceExtractor;
             AppearanceThreshold = appearanceThreshold;
             _pool = new Pool<SimpleTracker<DeepTrack>>(poolCapacity);
@@ -34,23 +32,9 @@ namespace MOT.CORE.Matchers.Deep
 
         public float AppearanceThreshold { get; private init; }
 
-        public override IReadOnlyList<ITrack> Run(Bitmap frame, float targetConfidence, params DetectionObjectType[] detectionObjectTypes)
-        {
-            IPrediction[] detectedObjects = _predictor.Predict(frame, targetConfidence, detectionObjectTypes).ToArray();
-            var tracks = Track(frame, detectedObjects);
-            return tracks;
-        }
-
         public override void Dispose()
         {
-            _predictor.Dispose();
             _appearanceExtractor.Dispose();
-        }
-
-        public override IPrediction[] Predict(Bitmap frame, float targetConfidence, params DetectionObjectType[] detectionObjectTypes)
-        {
-            IPrediction[] detectedObjects = _predictor.Predict(frame, targetConfidence, detectionObjectTypes).ToArray();
-            return detectedObjects;
         }
 
         public override IReadOnlyList<ITrack> Track(Bitmap frame, IPrediction[] detectedObjects)
