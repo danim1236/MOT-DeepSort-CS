@@ -1,8 +1,9 @@
-﻿using MOT.CORE.YOLO;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
+using MOT.CORE.Matchers.Abstract;
+using MOT.CORE.YOLO;
 
-namespace MOT.CORE.Matchers.Abstract
+namespace MOT.CORE.Matchers.Base
 {
     public abstract class TrackDecorator : ITrack
     {

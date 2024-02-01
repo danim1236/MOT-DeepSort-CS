@@ -1,9 +1,10 @@
-﻿using MOT.CORE.YOLO;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using MOT.CORE.Matchers.Abstract;
+using MOT.CORE.YOLO;
 
-namespace MOT.CORE.Matchers.Abstract
+namespace MOT.CORE.Matchers.Base
 {
     public class Track : ITrack
     {

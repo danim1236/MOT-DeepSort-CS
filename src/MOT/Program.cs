@@ -8,7 +8,6 @@ using MOT.CORE.YOLO;
 using MOT.CORE.YOLO.Models;
 using System.Drawing;
 using MOT.CORE.Matchers.SORT;
-using MOT.CORE.Matchers.Deep;
 using CommandLine;
 using MOT.CORE.ReID.Models.Fast_Reid;
 
@@ -43,7 +42,9 @@ namespace MOT
 
             IPredictor predictor = ConstructPredictorFromOptions(options);
 
-            Matcher matcher = ConstructMatcherFromOptions(options);
+            Matcher matcher = new SortMatcher(options.Threshold ?? 0.3f,
+                options.MaxMisses ?? 15,
+                options.MinStreak ?? 3);
             float targetConfidence = float.Clamp(options.TargetConfidence ?? 0.0f, 0.0f, 1.0f);
 
             Mat readBuffer = new Mat();
@@ -66,33 +67,6 @@ namespace MOT
 
             matcher.Dispose();
             videoWriter.Dispose();
-        }
-
-        private static Matcher ConstructMatcherFromOptions(CommandLineOptions options)
-        {
-            Matcher matcher = options.MatcherType switch
-            { 
-                MatcherType.DeepSort => new DeepSortMatcher(ConstructAppearanceExtractorFromOptions(options),
-                    options.AppearanceWeight ?? 0.775f,
-                    options.Threshold ?? 0.5f,
-                    options.MaxMisses ?? 50,
-                    options.FramesToAppearanceSmooth ?? 40,
-                    options.SmoothAppearanceWeight ?? 0.875f,
-                    options.MinStreak ?? 8),
-
-                MatcherType.Sort => new SortMatcher(options.Threshold ?? 0.3f,
-                    options.MaxMisses ?? 15,
-                    options.MinStreak ?? 3),
-
-                MatcherType.Deep => new DeepMatcher(ConstructAppearanceExtractorFromOptions(options),
-                    options.Threshold ?? 0.875f,
-                    options.MaxMisses ?? 10,
-                    options.MinStreak ?? 4),
-
-                _ => throw new Exception("Matcher cannot be constructed.")
-            };
-
-            return matcher;
         }
 
         private static IPredictor ConstructPredictorFromOptions(CommandLineOptions options)
