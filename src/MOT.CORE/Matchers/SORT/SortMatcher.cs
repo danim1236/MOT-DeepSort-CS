@@ -8,7 +8,6 @@ using System.Linq;
 using MOT.CORE.Matchers.Abstract;
 using System.Runtime.CompilerServices;
 using MOT.CORE.Matchers.Trackers;
-using MOT.CORE.Matchers.Deep;
 
 namespace MOT.CORE.Matchers.SORT
 {
@@ -32,8 +31,13 @@ namespace MOT.CORE.Matchers.SORT
 
         public override IReadOnlyList<ITrack> Run(Bitmap frame, float targetConfidence, params DetectionObjectType[] detectionObjectTypes)
         {
-            IReadOnlyList<IPrediction> detectedObjects = _predictor.Predict(frame, targetConfidence, detectionObjectTypes);
+            var detectedObjects = Predict(frame, targetConfidence, detectionObjectTypes);
 
+            return Track(frame, detectedObjects);
+        }
+
+        public override IReadOnlyList<ITrack> Track(Bitmap frame, IPrediction[] detectedObjects)
+        {
             if (_trackers.Count == 0)
                 return Init(detectedObjects);
 
@@ -50,6 +54,12 @@ namespace MOT.CORE.Matchers.SORT
             RemoveOutdatedTracks<KalmanTracker<SortTrack>, SortTrack>(ref _trackers);
 
             return tracks;
+        }
+
+        public override IPrediction[] Predict(Bitmap frame, float targetConfidence, DetectionObjectType[] detectionObjectTypes)
+        {
+            IPrediction[] detectedObjects = _predictor.Predict(frame, targetConfidence, detectionObjectTypes).ToArray();
+            return detectedObjects;
         }
 
         public override void Dispose()

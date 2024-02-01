@@ -50,9 +50,11 @@ namespace MOT
 
             while (readBuffer.IsEmpty == false)
             {
-                Bitmap frame = readBuffer.ToBitmap();
+                var frame = readBuffer.ToBitmap();
 
-                IReadOnlyList<ITrack> tracks = matcher.Run(frame, targetConfidence, DetectionObjectType.Person);
+                var detectedObjects = matcher.Predict(frame, targetConfidence, DetectionObjectType.Person);
+
+                var tracks = matcher.Track(frame, detectedObjects);
 
                 DrawTracks(frame, tracks);
 

@@ -47,7 +47,13 @@ namespace MOT.CORE.Matchers.Deep
 
         public override IReadOnlyList<ITrack> Run(Bitmap frame, float targetConfidence, params DetectionObjectType[] detectionObjectTypes)
         {
-            IPrediction[] detectedObjects = _predictor.Predict(frame, targetConfidence, detectionObjectTypes).ToArray();
+            var detectedObjects = Predict(frame, targetConfidence, detectionObjectTypes);
+
+            return Tracky(frame, detectedObjects);
+        }
+
+        private IReadOnlyList<ITrack> Tracky(Bitmap frame, IPrediction[] detectedObjects)
+        {
             Vector[] appearances = _appearanceExtractor.Predict(frame, detectedObjects).ToArray();
 
             if (_trackers.Count == 0)
@@ -72,6 +78,34 @@ namespace MOT.CORE.Matchers.Deep
         {
             _predictor.Dispose();
             _appearanceExtractor.Dispose();
+        }
+
+        public override IPrediction[] Predict(Bitmap frame, float targetConfidence, DetectionObjectType[] detectionObjectTypes)
+        {
+            IPrediction[] detectedObjects = _predictor.Predict(frame, targetConfidence, detectionObjectTypes).ToArray();
+            return detectedObjects;
+        }
+
+        public override IReadOnlyList<ITrack> Track(Bitmap frame, IPrediction[] detectedObjects)
+        {
+            Vector[] appearances = _appearanceExtractor.Predict(frame, detectedObjects).ToArray();
+
+            if (_trackers.Count == 0)
+                return Init(detectedObjects, appearances);
+
+            PredictBoundingBoxes();
+
+            (IReadOnlyList<(int TrackIndex, int DetectionIndex)> matchedPairs, IReadOnlyList<int> unmatched) = Match(detectedObjects, appearances);
+
+            UpdateMatched(matchedPairs, detectedObjects, appearances);
+
+            for (int i = 0; i < unmatched.Count; i++)
+                AddNewTrack(detectedObjects, appearances, unmatched[i]);
+
+            List<ITrack> tracks = ConfirmTracks<KalmanTracker<DeepSortTrack>, DeepSortTrack>(_trackers);
+            RemoveOutdatedTracks<KalmanTracker<DeepSortTrack>, DeepSortTrack>(ref _trackers);
+
+            return tracks;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

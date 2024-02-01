@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "MOT": {
+      "commandName": "Project",
+      "commandLineArgs": " -s S:\\Danim\\video_test_2.mp4 -t target2.mp4 -d yolo640v5.onnx -y 1 -m 1 -a osnet_x1_0_msmt17.onnx -v 0 -c .4"
+    }
+  }
+}

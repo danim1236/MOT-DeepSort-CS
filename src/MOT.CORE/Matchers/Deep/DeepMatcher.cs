@@ -37,6 +37,24 @@ namespace MOT.CORE.Matchers.Deep
         public override IReadOnlyList<ITrack> Run(Bitmap frame, float targetConfidence, params DetectionObjectType[] detectionObjectTypes)
         {
             IPrediction[] detectedObjects = _predictor.Predict(frame, targetConfidence, detectionObjectTypes).ToArray();
+            var tracks = Track(frame, detectedObjects);
+            return tracks;
+        }
+
+        public override void Dispose()
+        {
+            _predictor.Dispose();
+            _appearanceExtractor.Dispose();
+        }
+
+        public override IPrediction[] Predict(Bitmap frame, float targetConfidence, params DetectionObjectType[] detectionObjectTypes)
+        {
+            IPrediction[] detectedObjects = _predictor.Predict(frame, targetConfidence, detectionObjectTypes).ToArray();
+            return detectedObjects;
+        }
+
+        public override IReadOnlyList<ITrack> Track(Bitmap frame, IPrediction[] detectedObjects)
+        {
             Vector[] appearances = _appearanceExtractor.Predict(frame, detectedObjects).ToArray();
 
             if (_trackers.Count == 0)
@@ -55,12 +73,6 @@ namespace MOT.CORE.Matchers.Deep
             RemoveOutdatedTracks<SimpleTracker<DeepTrack>, DeepTrack>(ref _trackers);
 
             return tracks;
-        }
-
-        public override void Dispose()
-        {
-            _predictor.Dispose();
-            _appearanceExtractor.Dispose();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
